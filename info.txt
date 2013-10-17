@@ -1,0 +1,14 @@
+http://stackoverflow.com/questions/13073605/how-do-i-make-egit-respect-multi-project-git-repository
+0. git clone into this folder
+1. File, Import...
+2. Git, Projects from Git, Next>
+3. Local, Next>
+4. Add..., Browse , Finish
+# 5. Select repo from 4., Next>
+6. Import existing projects, Next>
+7. Check the checkboxes beside the projects you want and click Finish
+
+
+1. check folders existing 'xtend-gen' and 'src-gen'
+ - run launchMeBefore.bat
+2. create mwe2 workflow for grammar (launch .mwe2) and ignore errors
