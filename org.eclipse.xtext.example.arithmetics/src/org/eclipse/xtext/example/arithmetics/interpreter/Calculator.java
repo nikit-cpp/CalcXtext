@@ -9,9 +9,17 @@
 package org.eclipse.xtext.example.arithmetics.interpreter;
 
 import types.TypedValue;
+import inter.Interpreter;
+import inter.returnables.Expr;
+import inter.returnables.Term;
 
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.Map;
+
+import lexer.Tag;
+import main.OutputSystem;
+import options.Options;
 
 import org.eclipse.xtext.example.arithmetics.arithmetics.ArithmeticsPackage;
 import org.eclipse.xtext.example.arithmetics.arithmetics.DeclaredParameter;
@@ -28,6 +36,8 @@ import org.eclipse.xtext.util.PolymorphicDispatcher;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
+import exceptions.MyException;
+
 /**
  * an interpreter for instances of EClasses of the {@link ArithmeticsPackage}.
  * 
@@ -39,7 +49,23 @@ public class Calculator {
 	
 	private PolymorphicDispatcher<TypedValue> dispatcher = PolymorphicDispatcher.createForSingleTarget("internalEvaluate", 2, 2, this);
 	
-	// Начинаем с него...
+	
+	OutputSystem output;
+	Options options;
+	HashMap<String, TypedValue> table;
+	Interpreter inter;
+	
+	// Конструктор инициализирует моё окружение из Executor
+	public Calculator(){
+		output = new OutputSystem();
+		options = new Options(output);
+		MyException.staticInit(options);
+		table = new HashMap<String, TypedValue>();
+		inter = new Interpreter(options, table, output);
+		System.out.println("constructor Calculator");
+	}
+	
+	// InterpreterAutoEdit начинает с него...
 	public TypedValue evaluate(Expression obj) {
 		return evaluate(obj, ImmutableMap.<String,TypedValue>of());
 	}
@@ -54,7 +80,8 @@ public class Calculator {
 	}
 	
 	protected TypedValue internalEvaluate(NumberLiteral e, ImmutableMap<String,TypedValue> values) { 
-		return e.getValue();
+		//return e.getValue();
+		return new TypedValue(e.getValue().doubleValue());
 	}
 	
 	protected TypedValue internalEvaluate(FunctionCall e, ImmutableMap<String,TypedValue> values) {
@@ -71,19 +98,36 @@ public class Calculator {
 		return evaluate(d.getExpr(),ImmutableMap.copyOf(params));
 	}
 	
-	protected TypedValue internalEvaluate(Plus plus, ImmutableMap<String,TypedValue> values) {
-		return evaluate(plus.getLeft(),values).add(evaluate(plus.getRight(),values));
+	protected TypedValue internalEvaluate(Plus plus, ImmutableMap<String,TypedValue> values) throws Exception {
+		//return evaluate(plus.getLeft(),values)
+		//		.add(evaluate(plus.getRight(),values));
+		TypedValue left = evaluate(plus.getLeft(),values);
+		TypedValue right = evaluate(plus.getRight(),values);
+		
+		return inter.exec(new Expr(left, right, Tag.PLUS));
 	}
-	protected TypedValue internalEvaluate(Minus minus, ImmutableMap<String,TypedValue> values) {
-		return evaluate(minus.getLeft(),values).subtract(evaluate(minus.getRight(),values));
+	protected TypedValue internalEvaluate(Minus minus, ImmutableMap<String,TypedValue> values) throws Exception {
+		//return evaluate(minus.getLeft(),values)
+		//		.subtract(evaluate(minus.getRight(),values));
+		
+		TypedValue left = evaluate(minus.getLeft(),values);
+		TypedValue right = evaluate(minus.getRight(),values);
+		
+		return inter.exec(new Expr(left, right, Tag.MINUS));
 	}
-	protected TypedValue internalEvaluate(Div div, ImmutableMap<String,TypedValue> values) {
+	protected TypedValue internalEvaluate(Div div, ImmutableMap<String,TypedValue> values) throws Exception {
 		TypedValue left = evaluate(div.getLeft(),values);
 		TypedValue right = evaluate(div.getRight(),values);
-		return left.divide(right,20,RoundingMode.HALF_UP);
+		/*return left
+				.divide(right,20,RoundingMode.HALF_UP);*/
+		return inter.exec(new Term(left, right, Tag.DIV));
 	}
-	protected TypedValue internalEvaluate(Multi multi, ImmutableMap<String,TypedValue> values) {
-		return evaluate(multi.getLeft(),values).multiply(evaluate(multi.getRight(),values));
+	protected TypedValue internalEvaluate(Multi multi, ImmutableMap<String,TypedValue> values) throws Exception {
+		/*return evaluate(multi.getLeft(),values)
+				.multiply(evaluate(multi.getRight(),values));*/
+		TypedValue left = evaluate(multi.getLeft(),values);
+		TypedValue right = evaluate(multi.getRight(),values);
+		return inter.exec(new Term(left, right, Tag.MUL));
 	}
 	
 }
