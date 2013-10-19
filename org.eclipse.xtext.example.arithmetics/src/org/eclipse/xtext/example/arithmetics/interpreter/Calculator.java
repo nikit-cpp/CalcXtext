@@ -8,7 +8,8 @@
 
 package org.eclipse.xtext.example.arithmetics.interpreter;
 
-import java.math.BigDecimal;
+import types.TypedValue;
+
 import java.math.RoundingMode;
 import java.util.Map;
 
@@ -36,51 +37,52 @@ import com.google.common.collect.Maps;
  */
 public class Calculator {
 	
-	private PolymorphicDispatcher<BigDecimal> dispatcher = PolymorphicDispatcher.createForSingleTarget("internalEvaluate", 2, 2, this);
+	private PolymorphicDispatcher<TypedValue> dispatcher = PolymorphicDispatcher.createForSingleTarget("internalEvaluate", 2, 2, this);
 	
-	public BigDecimal evaluate(Expression obj) {
-		return evaluate(obj, ImmutableMap.<String,BigDecimal>of());
+	// Начинаем с него...
+	public TypedValue evaluate(Expression obj) {
+		return evaluate(obj, ImmutableMap.<String,TypedValue>of());
 	}
 	
-	public BigDecimal evaluate(Expression obj, ImmutableMap<String,BigDecimal> values) {
-		BigDecimal invoke = dispatcher.invoke(obj, values);
+	public TypedValue evaluate(Expression obj, ImmutableMap<String,TypedValue> values) {
+		TypedValue invoke = dispatcher.invoke(obj, values);
 		return invoke;
 	}
 	
-	protected BigDecimal internalEvaluate(Expression e, ImmutableMap<String,BigDecimal> values) { 
+	protected TypedValue internalEvaluate(Expression e, ImmutableMap<String,TypedValue> values) { 
 		throw new UnsupportedOperationException(e.toString());
 	}
 	
-	protected BigDecimal internalEvaluate(NumberLiteral e, ImmutableMap<String,BigDecimal> values) { 
+	protected TypedValue internalEvaluate(NumberLiteral e, ImmutableMap<String,TypedValue> values) { 
 		return e.getValue();
 	}
 	
-	protected BigDecimal internalEvaluate(FunctionCall e, ImmutableMap<String,BigDecimal> values) {
+	protected TypedValue internalEvaluate(FunctionCall e, ImmutableMap<String,TypedValue> values) {
 		if (e.getFunc() instanceof DeclaredParameter) {
 			return values.get(e.getFunc().getName());
 		} 
 		Definition d = (Definition) e.getFunc();
-		Map<String,BigDecimal> params = Maps.newHashMap();
+		Map<String,TypedValue> params = Maps.newHashMap();
 		for (int i=0; i<e.getArgs().size();i++) {
 			DeclaredParameter declaredParameter = d.getArgs().get(i);
-			BigDecimal evaluate = evaluate(e.getArgs().get(i), values);
+			TypedValue evaluate = evaluate(e.getArgs().get(i), values);
 			params.put(declaredParameter.getName(), evaluate);
 		}
 		return evaluate(d.getExpr(),ImmutableMap.copyOf(params));
 	}
 	
-	protected BigDecimal internalEvaluate(Plus plus, ImmutableMap<String,BigDecimal> values) {
+	protected TypedValue internalEvaluate(Plus plus, ImmutableMap<String,TypedValue> values) {
 		return evaluate(plus.getLeft(),values).add(evaluate(plus.getRight(),values));
 	}
-	protected BigDecimal internalEvaluate(Minus minus, ImmutableMap<String,BigDecimal> values) {
+	protected TypedValue internalEvaluate(Minus minus, ImmutableMap<String,TypedValue> values) {
 		return evaluate(minus.getLeft(),values).subtract(evaluate(minus.getRight(),values));
 	}
-	protected BigDecimal internalEvaluate(Div div, ImmutableMap<String,BigDecimal> values) {
-		BigDecimal left = evaluate(div.getLeft(),values);
-		BigDecimal right = evaluate(div.getRight(),values);
+	protected TypedValue internalEvaluate(Div div, ImmutableMap<String,TypedValue> values) {
+		TypedValue left = evaluate(div.getLeft(),values);
+		TypedValue right = evaluate(div.getRight(),values);
 		return left.divide(right,20,RoundingMode.HALF_UP);
 	}
-	protected BigDecimal internalEvaluate(Multi multi, ImmutableMap<String,BigDecimal> values) {
+	protected TypedValue internalEvaluate(Multi multi, ImmutableMap<String,TypedValue> values) {
 		return evaluate(multi.getLeft(),values).multiply(evaluate(multi.getRight(),values));
 	}
 	

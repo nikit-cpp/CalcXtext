@@ -8,7 +8,7 @@
 
 package org.eclipse.xtext.example.arithmetics.ui.autoedit;
 
-import java.math.BigDecimal;
+import types.TypedValue;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentCommand;
@@ -41,10 +41,10 @@ public class InterpreterAutoEdit implements IAutoEditStrategy {
 					line = document.getLineOfOffset(command.offset);
 					lineStart = document.getLineOffset(line);
 					if (!document.get(lineStart, 3).equals("def")) {
-						BigDecimal computedResult = computeResult(document,
+						TypedValue computedResult = computeResult(document,
 								command);
 						if (computedResult != null)
-							command.text = lineDelimiter + "// = " + computedResult + lineDelimiter;
+							command.text = /*lineDelimiter +*/ "// = " + computedResult + lineDelimiter;
 					}
 				} catch (BadLocationException e) {
 					// ignore
@@ -53,11 +53,11 @@ public class InterpreterAutoEdit implements IAutoEditStrategy {
 		}
 	}
 
-	private BigDecimal computeResult(IDocument document,
+	private TypedValue computeResult(IDocument document,
 			final DocumentCommand command) {
 		return ((IXtextDocument) document)
-				.readOnly(new IUnitOfWork<BigDecimal, XtextResource>() {
-					public BigDecimal exec(XtextResource state)
+				.readOnly(new IUnitOfWork<TypedValue, XtextResource>() {
+					public TypedValue exec(XtextResource state)
 							throws Exception {
 						Evaluation stmt = findEvaluation(command, state);
 						if (stmt == null)
@@ -67,7 +67,7 @@ public class InterpreterAutoEdit implements IAutoEditStrategy {
 				});
 	}
 
-	protected BigDecimal evaluate(Evaluation stmt) {
+	protected TypedValue evaluate(Evaluation stmt) {
 		return new Calculator().evaluate(stmt.getExpression());
 	}
 
