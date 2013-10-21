@@ -10,8 +10,7 @@ package org.eclipse.xtext.example.arithmetics.interpreter;
 
 import types.TypedValue;
 import inter.Interpreter;
-import inter.returnables.Expr;
-import inter.returnables.Term;
+import inter.returnables.*;
 
 import java.math.RoundingMode;
 import java.util.HashMap;
