@@ -12,6 +12,7 @@ import types.TypedValue;
 import inter.Interpreter;
 import inter.returnables.*;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +81,11 @@ public class Calculator {
 	
 	protected TypedValue internalEvaluate(NumberLiteral e, ImmutableMap<String,TypedValue> values) { 
 		//return e.getValue();
-		return new TypedValue(e.getValue().doubleValue());
+		BigDecimal v = e.getValue();
+		if(v.intValue()==v.doubleValue())
+			return new TypedValue(v.intValue());
+		else
+			return new TypedValue(v.doubleValue());
 	}
 	
 	protected TypedValue internalEvaluate(FunctionCall e, ImmutableMap<String,TypedValue> values) {

@@ -27,8 +27,8 @@ class ArithmeticsValidator extends AbstractArithmeticsValidator {
 
 	@Check
 	def checkDivByZero(Div div) {
-		val bigDecimal = calculator.evaluate(div.right)
-		if (bigDecimal.getDouble()==0.0) 
+		val bigDecimal = calculator.evaluate(div.right) // получаем правую часть
+		if (bigDecimal.getDouble()==0.0 && bigDecimal.getInt()==0) // TODO Костыль
 			error("Division by zero detected.", DIV__RIGHT)
 	}
 	
