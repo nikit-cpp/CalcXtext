@@ -61,7 +61,7 @@ public class Calculator {
 		MyException.staticInit(options);
 		table = new HashMap<String, TypedValue>();
 		inter = new Interpreter(options, table, output);
-		System.out.println("constructor Calculator");
+		System.out.println("constructor Calculator"); // TODO не подходит - множественные вызовы(1)
 	}
 	
 	// InterpreterAutoEdit начинает с него...

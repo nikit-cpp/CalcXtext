@@ -30,6 +30,10 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
  *         an interactive interpreter as an {@link IAutoEditStrategy}
  */
 public class InterpreterAutoEdit implements IAutoEditStrategy {
+	
+	public InterpreterAutoEdit(){
+		System.out.println("InterpreterAutoEdit constructor"); // TODO не подходит - множественные вызовы(2)
+	}
 
 	public void customizeDocumentCommand(IDocument document,
 			DocumentCommand command) {
