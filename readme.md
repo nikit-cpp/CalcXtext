@@ -11,7 +11,7 @@
 7. Check the checkboxes beside the projects you want and click Finish
 
 # II. Compiling & Launching
-1. run launchMeBefore.bat for create folders existing 'xtend-gen' and 'src-gen'
+1. run launchMeBefore.bat for create folders existing `xtend-gen` and `src-gen`
 2. ignore errors create mwe2 workflow for grammar (launch .mwe2)
 3. reset the workspace
-4. enlarge MaxPermSize: add VM argument '-XX:MaxPermSize=512m'
+4. enlarge MaxPermSize: add VM argument `-XX:MaxPermSize=512m`
