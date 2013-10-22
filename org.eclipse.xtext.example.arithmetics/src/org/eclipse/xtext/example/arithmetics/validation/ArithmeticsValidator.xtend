@@ -14,7 +14,7 @@ import org.eclipse.xtext.example.arithmetics.interpreter.Calculator
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.ValidationMessageAcceptor
 
-import static org.eclipse.xtext.example.arithmetics.arithmetics.ArithmeticsPackage.Literals.*
+import static org.eclipse.xtext.example.arithmetics.arithmetics.ArithmeticsPackage$Literals.*
 
 /**
  * Custom validation rules. 
@@ -27,8 +27,8 @@ class ArithmeticsValidator extends AbstractArithmeticsValidator {
 
 	@Check
 	def checkDivByZero(Div div) {
-		val bigDecimal = calculator.evaluate(div.right) // получаем правую часть
-		if (bigDecimal.getDouble()==0.0 && bigDecimal.getInt()==0) // TODO Костыль
+		val bigDecimal = calculator.evaluate(div.right)
+		if (bigDecimal.doubleValue()==0.0) 
 			error("Division by zero detected.", DIV__RIGHT)
 	}
 	
@@ -40,7 +40,7 @@ class ArithmeticsValidator extends AbstractArithmeticsValidator {
 		if (expr instanceof NumberLiteral || expr instanceof FunctionCall) 
 			return;
 		// ignore evaluations
-		if (EcoreUtil2.getContainerOfType(expr, Evaluation)!=null)
+		if (EcoreUtil2::getContainerOfType(expr, typeof(Evaluation))!=null)
 			return;
 		
 		val contents = expr.eAllContents
@@ -54,7 +54,7 @@ class ArithmeticsValidator extends AbstractArithmeticsValidator {
 			warning(
 					"Expression could be normalized to constant '"+decimal+"'", 
 					null,
-					ValidationMessageAcceptor.INSIGNIFICANT_INDEX,
+					ValidationMessageAcceptor::INSIGNIFICANT_INDEX,
 					NORMALIZABLE,
 					decimal.toString())
 		}

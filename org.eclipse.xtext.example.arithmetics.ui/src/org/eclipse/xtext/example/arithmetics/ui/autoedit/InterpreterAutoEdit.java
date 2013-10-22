@@ -8,7 +8,7 @@
 
 package org.eclipse.xtext.example.arithmetics.ui.autoedit;
 
-import types.TypedValue;
+import java.math.BigDecimal;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentCommand;
@@ -30,10 +30,6 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
  *         an interactive interpreter as an {@link IAutoEditStrategy}
  */
 public class InterpreterAutoEdit implements IAutoEditStrategy {
-	
-	public InterpreterAutoEdit(){
-		System.out.println("InterpreterAutoEdit constructor"); // TODO не подходит - множественные вызовы(2)
-	}
 
 	public void customizeDocumentCommand(IDocument document,
 			DocumentCommand command) {
@@ -45,10 +41,10 @@ public class InterpreterAutoEdit implements IAutoEditStrategy {
 					line = document.getLineOfOffset(command.offset);
 					lineStart = document.getLineOffset(line);
 					if (!document.get(lineStart, 3).equals("def")) {
-						TypedValue computedResult = computeResult(document,
+						BigDecimal computedResult = computeResult(document,
 								command);
 						if (computedResult != null)
-							command.text = /*lineDelimiter +*/ "// = " + computedResult + lineDelimiter;
+							command.text = lineDelimiter + "// = " + computedResult + lineDelimiter;
 					}
 				} catch (BadLocationException e) {
 					// ignore
@@ -57,11 +53,11 @@ public class InterpreterAutoEdit implements IAutoEditStrategy {
 		}
 	}
 
-	private TypedValue computeResult(IDocument document,
+	private BigDecimal computeResult(IDocument document,
 			final DocumentCommand command) {
 		return ((IXtextDocument) document)
-				.readOnly(new IUnitOfWork<TypedValue, XtextResource>() {
-					public TypedValue exec(XtextResource state)
+				.readOnly(new IUnitOfWork<BigDecimal, XtextResource>() {
+					public BigDecimal exec(XtextResource state)
 							throws Exception {
 						Evaluation stmt = findEvaluation(command, state);
 						if (stmt == null)
@@ -71,7 +67,7 @@ public class InterpreterAutoEdit implements IAutoEditStrategy {
 				});
 	}
 
-	protected TypedValue evaluate(Evaluation stmt) {
+	protected BigDecimal evaluate(Evaluation stmt) {
 		return new Calculator().evaluate(stmt.getExpression());
 	}
 

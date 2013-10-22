@@ -8,7 +8,7 @@
 
 package org.eclipsecon.example.interpreter;
 
-import types.TypedValue;
+import java.math.BigDecimal;
 
 import org.eclipse.xtext.example.arithmetics.ArithmeticsStandaloneSetup;
 import org.eclipse.xtext.example.arithmetics.arithmetics.Evaluation;
@@ -36,7 +36,7 @@ public class CalculatorTest extends AbstractXtextTests {
     }
     
     protected void check(double expected,String expression) throws Exception {
-        double result = evaluate(getStatement(expression)).getDouble();
+        double result = evaluate(getStatement(expression)).doubleValue();
         assertEquals(expected, result, 0.0001);
     }
 
@@ -46,7 +46,7 @@ public class CalculatorTest extends AbstractXtextTests {
         return statement;
     }
 
-    private TypedValue evaluate(Statement statement) {
+    private BigDecimal evaluate(Statement statement) {
         return new Calculator().evaluate(((Evaluation)statement).getExpression());
     }
 }

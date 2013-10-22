@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.eclipse.xtext.example.arithmetics.ui
 Bundle-Vendor: itemis AG
-Bundle-Version: 2.4.3.qualifier
+Bundle-Version: 2.4.0.qualifier
 Bundle-SymbolicName: org.eclipse.xtext.example.arithmetics.ui;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext.example.arithmetics;visibility:=reexport,
@@ -15,8 +15,7 @@ Require-Bundle: org.eclipse.xtext.example.arithmetics;visibility:=reexport,
  org.antlr.runtime,
  org.eclipse.xtext.common.types.ui,
  org.eclipse.xtext.ui.codetemplates.ui,
- org.eclipse.compare,
- CalcInterpreter
+ org.eclipse.compare
 Import-Package: org.apache.log4j;version="1.2.15",
  org.eclipse.xtext.xbase.lib
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
