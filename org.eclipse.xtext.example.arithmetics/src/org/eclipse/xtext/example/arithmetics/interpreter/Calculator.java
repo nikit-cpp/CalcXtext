@@ -9,6 +9,7 @@
 package org.eclipse.xtext.example.arithmetics.interpreter;
 
 import types.TypedValue;
+import inter.Env;
 import inter.Interpreter;
 import inter.returnables.*;
 
@@ -35,6 +36,8 @@ import org.eclipse.xtext.util.PolymorphicDispatcher;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import exceptions.MyException;
 
@@ -49,6 +52,8 @@ public class Calculator {
 	
 	private PolymorphicDispatcher<TypedValue> dispatcher = PolymorphicDispatcher.createForSingleTarget("internalEvaluate", 2, 2, this);
 	
+	//@Inject
+	//Env env;
 	
 	OutputSystem output;
 	Options options;
