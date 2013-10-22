@@ -22,6 +22,7 @@ import org.eclipse.xtext.example.arithmetics.arithmetics.Minus;
 import org.eclipse.xtext.example.arithmetics.arithmetics.Multi;
 import org.eclipse.xtext.example.arithmetics.arithmetics.NumberLiteral;
 import org.eclipse.xtext.example.arithmetics.arithmetics.Plus;
+import org.eclipse.xtext.example.arithmetics.arithmetics.Power;
 import org.eclipse.xtext.util.PolymorphicDispatcher;
 
 import com.google.common.collect.ImmutableMap;
@@ -84,4 +85,8 @@ public class Calculator {
 		return evaluate(multi.getLeft(),values).multiply(evaluate(multi.getRight(),values));
 	}
 	
+	protected BigDecimal internalEvaluate(Power power, ImmutableMap<String,BigDecimal> values) {
+		return evaluate(power.getLeft(),values)
+				.pow(evaluate(power.getRight(),values).intValue());
+	}
 }

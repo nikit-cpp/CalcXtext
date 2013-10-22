@@ -44,7 +44,10 @@ Addition returns Expression:
 	Multiplication (({Plus.left=current} '+' | {Minus.left=current} '-') right=Multiplication)*;
 
 Multiplication returns Expression:
-	PrimaryExpression (({Multi.left=current} '*' | {Div.left=current} '/') right=PrimaryExpression)*;
+	PowerRule (({Multi.left=current} '*' | {Div.left=current} '/') right=PowerRule)*;
+	
+PowerRule returns Expression:
+	PrimaryExpression ({Power.left=current} '^' right=PowerRule)*;
 
 PrimaryExpression returns Expression:
 	'(' Expression ')' |
