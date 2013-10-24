@@ -33,6 +33,8 @@ public class CalculatorTest extends AbstractXtextTests {
         check(5,"1 * 2 + 3");
         check(-4,"1 - 2 - 3");
         check(1.5,"1 / 2 * 3");
+        //check(2417851639229258349412352,"2^3^4");
+        check(720,"3!!");
     }
     
     protected void check(double expected,String expression) throws Exception {

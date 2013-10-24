@@ -17,6 +17,7 @@ import org.eclipse.xtext.example.arithmetics.arithmetics.DeclaredParameter;
 import org.eclipse.xtext.example.arithmetics.arithmetics.Definition;
 import org.eclipse.xtext.example.arithmetics.arithmetics.Div;
 import org.eclipse.xtext.example.arithmetics.arithmetics.Expression;
+import org.eclipse.xtext.example.arithmetics.arithmetics.Factorial;
 import org.eclipse.xtext.example.arithmetics.arithmetics.FunctionCall;
 import org.eclipse.xtext.example.arithmetics.arithmetics.Minus;
 import org.eclipse.xtext.example.arithmetics.arithmetics.Multi;
@@ -88,5 +89,18 @@ public class Calculator {
 	protected BigDecimal internalEvaluate(Power power, ImmutableMap<String,BigDecimal> values) {
 		return evaluate(power.getLeft(),values)
 				.pow(evaluate(power.getRight(),values).intValue());
+	}
+	
+	protected BigDecimal internalEvaluate(Factorial factorial, ImmutableMap<String,BigDecimal> values) throws Exception {
+		BigDecimal left = evaluate(factorial.getExpr(),values);
+				
+		int i = left.intValue();
+		if(i<0) throw new Exception("Факториал отрицательного числа не определён!");
+		int t = i;
+        i = 1;
+        while (t != 0) {
+                i *= t--;
+        }
+		return new BigDecimal(i);
 	}
 }

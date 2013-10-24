@@ -15,6 +15,7 @@ import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.ValidationMessageAcceptor
 
 import static org.eclipse.xtext.example.arithmetics.arithmetics.ArithmeticsPackage$Literals.*
+import org.eclipse.xtext.example.arithmetics.arithmetics.Factorial
 
 /**
  * Custom validation rules. 
@@ -58,5 +59,12 @@ class ArithmeticsValidator extends AbstractArithmeticsValidator {
 					NORMALIZABLE,
 					decimal.toString())
 		}
+	}
+	
+	@Check
+	def checkFactorial(Factorial factorial) {
+		val bigDecimal = calculator.evaluate(factorial.expr)
+		if (bigDecimal.doubleValue()!=bigDecimal.intValue()) 
+			error("Non-integer value in factorial.", FACTORIAL__EXPR)
 	}
 }

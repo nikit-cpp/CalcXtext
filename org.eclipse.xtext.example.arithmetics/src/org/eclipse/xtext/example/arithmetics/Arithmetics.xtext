@@ -11,7 +11,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate arithmetics "http://www.eclipse.org/Xtext/example/Arithmetics"
 
 Module:
-	'module' name=ID
+	('module' name=ID)
 	(imports+=Import)*
 	(statements+=Statement)*;
 
@@ -47,8 +47,11 @@ Multiplication returns Expression:
 	PowerRule (({Multi.left=current} '*' | {Div.left=current} '/') right=PowerRule)*;
 	
 PowerRule returns Expression:
-	PrimaryExpression ({Power.left=current} '^' right=PowerRule)?;
-
+	FactorialRule ({Power.left=current} '^' right=PowerRule)?;
+	
+FactorialRule returns Expression:
+	PrimaryExpression ({Factorial.expr=current} '!')*;
+	
 PrimaryExpression returns Expression:
 	'(' Expression ')' |
 	{NumberLiteral} value=NUMBER |
